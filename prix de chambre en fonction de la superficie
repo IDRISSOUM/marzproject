@@ -1,0 +1,145 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+# Linear regression, gradient descent
+# from CS 229 Standford Univeristy.
+# Estimating house prices based on square footage and 
+# number of bedrooms.
+
+import numpy as np
+import matplotlib.pyplot as plt
+from numpy.linalg import inv
+
+
+
+DEBUG  = 1 # some info
+DEBUG2 = 0 # more info
+
+
+
+# Voici les données d'entraînement, 16 exemples
+train_data = np.array(
+    [
+    # superficie, #nchambre, prix
+    [1500, 2,  60000],
+    [1800, 2,  70000],
+    [1900, 2,  80000],
+    [2000, 3,  90000],
+    [2200, 3,  95000],
+    [2300, 2, 100000],
+    [2350, 3, 110000],
+    [2500, 3, 112000],
+    [2800, 4, 120000],
+    [2900, 3, 135000],
+    [3000, 4, 140000],
+    [3100, 4, 145000],
+    [3300, 5, 162000],
+    [3400, 4, 157000],
+    [3600, 5, 167000],
+    [3900, 5, 178000]
+    ]
+) # fin de données
+
+test_data = np.array(
+    [
+    # superficie, #nchambre
+    [1785, 2],
+    [1950, 2],
+    [2065, 3],
+    [2345, 2],
+    [2385, 3],
+    [2415, 3],
+    [2485, 4],
+    [2665, 3],
+    [2875, 4],
+    [3050, 4],
+    [3250, 5],
+    [3350, 4],
+    [3425, 3],
+    [3715, 5]
+    ]
+)
+
+
+
+m,n = train_data.shape # m = num lignes; n = num colonnes
+print ("matrine entrainement", m, "lignes")  # rows, # of training examples
+print ("matrine entrainement", n, "colunnes") 
+
+# Extraire les vecteurs de caractéristiques
+X = train_data [0:m, 0:n-1]
+print (X)
+print (X.shape)
+
+# Extraire les résultats attendus
+y = train_data [0:m, n-1] # vecteur colonne
+print (y)
+
+# ajustez n pour refléter le nombre de fonctionnalités dans chaque exemple d'entraînement
+# ceci pour quand X0 = 1 est inclus dans la matrice X
+n = n - 1 
+
+
+
+
+
+
+#classification des fleur d'iris
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Sep 22 11:07:05 2020
+
+@author: islam
+"""
+
+# Plot the centroids
+
+import numpy as np
+import sklearn
+import scipy
+
+# load a data set
+from sklearn.datasets import load_iris
+iris = load_iris()
+
+# Run the full dataset
+from sklearn.cluster import KMeans
+import pylab as pl
+
+# Plot centroids
+kmeans = KMeans(n_clusters=3, init="k-means++", max_iter=999, n_init=1, random_state=101) 
+kmeans.fit(iris.data)
+
+#features = iris.data
+#labels   = iris.target
+
+pl.scatter(iris.data[:,0], iris.data[:,1], s=2**7, c=iris.target, edgecolors="white", alpha=0.85, cmap="autumn")
+pl.grid()
+pl.xlabel(iris.feature_names[0])
+pl.ylabel(iris.feature_names[1])
+
+# plot 1 point from each centroid center
+pl.scatter(kmeans.cluster_centers_[:,0], kmeans.cluster_centers_[:,1], s=2**6, marker="*", c="blue")
+
+# add the class names
+for class_no in range(0,3) :
+    pl.annotate(iris.target_names[class_no],
+                 (iris.data[3+50*class_no,0], iris.data[3+50*class_no,1]))
+    
+pl.show()
+
+
+
+#Setosa, Versicolour et Virginica
+# Monitor how centroids converge
+np.set_printoptions(precision=3, suppress=True)
+
+for iteration in range(1,10) : # 1-9
+    
+    kmeans = KMeans(n_clusters=3, init="random", max_iter=iteration, n_init=1)
+    kmeans.fit(iris.data)
+    print ("Iteration: %i - Centroid 1: %s" % (iteration, kmeans.cluster_centers_[1]))
+
